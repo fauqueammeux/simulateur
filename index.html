@@ -139,8 +139,41 @@ const G = 150, CONSO_KM = 7 / 100, CONSO_H = 5, PRIX = 2.2, VEH = 1000 + 600 + 5
 const V_MUSC = 17, V_ELEC = 20; // vitesses moyennes à vélo (km/h)
 const MOTO_G = 92, MOTO_L = 4; // hypothèses deux-roues motorisé
 const WEEKS = 45, EC_N = 3, EC_KM = 1.5, EC_WEEKS = 50, EC_V = 20;
+function fuel(km, hours) {
+    if (km <= 0 || hours <= 0) return 0;
 
-function fuel(km, hours) { return (km / hours > 50) ? km * CONSO_KM : hours * CONSO_H; }
+    const vitesse = km / hours;
+
+    // Barème indicatif : vitesse moyenne et consommation en L/100 km
+    const bareme = [
+        [0, 14.6],
+        [5, 14.6],
+        [10, 11.9],
+        [20, 9.0],
+        [50, 7.5],
+        [80, 6.5],
+        [110, 7.5],
+        [130, 9.0]
+    ];
+
+    if (vitesse <= bareme[0][0]) {
+        return km * bareme[0][1] / 100;
+    }
+
+    for (let i = 1; i < bareme.length; i++) {
+        const [v2, c2] = bareme[i];
+        const [v1, c1] = bareme[i - 1];
+
+        if (vitesse <= v2) {
+            const conso = c1 + (c2 - c1) *
+                (vitesse - v1) / (v2 - v1);
+
+            return km * conso / 100;
+        }
+    }
+
+    return km * bareme[bareme.length - 1][1] / 100;
+}
 let last = null;
 
 function calc() {
