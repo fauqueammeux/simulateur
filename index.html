@@ -176,12 +176,22 @@ function calc() {
 
   // Changements
   let gSaved = 0, fuelSaved = 0;
-  if (chg.includes("travail")) {
+ if (chg.includes("travail")) {
     const limit = vt === "elec" ? 20 : 8;
-    if (!fit) warns.push("Vous ne vous sentez pas en forme pour pédaler : le trajet à vélo n’est pas compté.");
-    else if (vt === "peur") warns.push("La peur de circuler à vélo est un vrai frein : le trajet à vélo n’est pas compté tant qu’elle persiste. Voir les freins ci-dessous.");
-    else if (km > limit) warns.push(`${fr(km, 1)} km dépasse la distance raisonnable à ${vt === "elec" ? "vélo électrique (20 km)" : "vélo classique (8 km) : un vélo électrique pourrait aider"}.`);
-    else { gSaved += kmAn * gm; fuelSaved += fuelAn; }
+
+    if (!fit) {
+        warns.push("Vous ne vous sentez pas en forme pour pédaler : le trajet à vélo n’est pas compté.");
+    } else if (vt === "peur") {
+        warns.push("La peur de circuler à vélo est un vrai frein : le trajet à vélo n’est pas compté tant qu’elle persiste. Voir les freins ci-dessous.");
+    } else {
+        if (km > limit) {
+            warns.push(`${fr(km, 1)} km dépasse la distance raisonnable à ${vt === "elec" ? "vélo électrique (20 km)" : "vélo classique (8 km) : un vélo électrique pourrait aider"}.`);
+        }
+
+        // Les économies sont comptabilisées même si la distance dépasse la limite indicative.
+        gSaved += kmAn * gm;
+        fuelSaved += fuelAn;
+    }
   }
   if (chg.includes("courses")) {
     if (!fit || vt === "peur") warns.push("Les petites courses à vélo ne sont pas comptées (forme ou peur du vélo).");
