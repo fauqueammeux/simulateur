@@ -136,7 +136,7 @@ const val = n => (document.querySelector(`input[name=${n}]:checked`) || {}).valu
 const num = (id, d) => { const v = parseFloat($(id).value); return isFinite(v) && v >= 0 ? v : d; };
 const fr = (n, d = 0) => n.toLocaleString("fr-FR", { maximumFractionDigits: d });
 const G = 150, CONSO_KM = 7 / 100, CONSO_H = 7, PRIX = 2.2, VEH = 1000 + 600 + 500;
-const V_MUSC = 12, V_ELEC = 19; // vitesses moyennes à vélo (km/h)
+const V_MUSC = 17, V_ELEC = 19; // vitesses moyennes à vélo (km/h)
 const MOTO_G = 92, MOTO_L = 4; // hypothèses deux-roues motorisé
 const WEEKS = 45, EC_N = 3, EC_KM = 1.5, EC_WEEKS = 50, EC_V = 20;
 
